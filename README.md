@@ -1,9 +1,9 @@
 # MyEMS BACnet Service
 
 
-##Introduction
+## Introduction
 
-Acquisition data from BACnet devices
+This service is a component of MyEMS and acquires data from BACnet devices
 
 
 ## Prerequisites

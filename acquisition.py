@@ -311,12 +311,13 @@ def process(logger, ):
                                                'is_trend': is_trend,
                                                'value': int(value)})
 
-            # close udp socket
-            this_application.mux.directPort.handle_close()
         except Exception as e:
             logger.error("Step 3.2 ReadPointList " + str(e))
             time.sleep(60)
             continue
+        finally:
+            this_application.close_socket()
+            del this_application
 
         ################################################################################################################
         # Step 4: Save point values to historical database

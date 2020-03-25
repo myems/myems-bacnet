@@ -9,18 +9,24 @@ This service is a component of MyEMS and acquires data from BACnet devices
 ## Prerequisites
 
 mysql.connector
+
 bacpypes
 
 ## Installation
- 1. Install bacpypes library
+
+    1. Install MySQL Connector
+```
+    $ pip3 install mysql-connector-python
+```
+    2. Install bacpypes library
 ```
     $ sudo pip install bacpypes
 ```
- 2. Open port 47808
+    3. Open port 47808
 ```
     $ sudo ufw allow 47808
 ```
- 3. Install myems-bacnet service
+    4. Install myems-bacnet service
 ```
     $ sudo cp -R ~/myems-bacnet /myems-bacnet
     $ cd /myems-bacnet
@@ -29,8 +35,7 @@ bacpypes
 ```
     $ sudo nano config.py
 ```
-
- 4. Setup systemd configure file:
+    Setup systemd configure file:
 ```
     $ sudo cp myems-bacnet.service /lib/systemd/system/
 ```
@@ -44,8 +49,9 @@ bacpypes
 ```
 
 ## References
-  1. http://myems.io/
-  2. http://bacnet.org/
+
+  1. http://myems.io
+  2. http://bacnet.org
   3. https://github.com/JoelBender/bacpypes
   
 

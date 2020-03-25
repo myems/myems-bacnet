@@ -35,7 +35,7 @@ htmlcov
 doc/_build
 
 # Translations
-
+*.mo
 
 # Idea
 .idea
@@ -49,4 +49,5 @@ doc/_build
 # VIM temp files
 *~
 
-advancereport/
+# Log
+*.log

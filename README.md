@@ -3,7 +3,7 @@
 
 ## Introduction
 
-This service is a component of MyEMS and acquires data from BACnet devices
+This service is a component of MyEMS to acquire data from BACnet devices
 
 
 ## Prerequisites
@@ -16,11 +16,11 @@ bacpypes
 
     1. Install MySQL Connector
 ```
-    $ pip3 install mysql-connector-python
+    $ sudo pip3 install mysql-connector-python
 ```
     2. Install bacpypes library
 ```
-    $ sudo pip install bacpypes
+    $ sudo pip3 install bacpypes
 ```
     3. Open port 47808
 ```

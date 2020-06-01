@@ -7,27 +7,41 @@ This service is a component of MyEMS to acquire data from BACnet devices
 
 
 ## Prerequisites
+bacpypes
 
 mysql.connector
 
-bacpypes
+
 
 ## Installation
 
-    1. Install MySQL Connector
+Download and install MySQL Connector:
 ```
-    $ sudo pip3 install mysql-connector-python
+    $ cd ~/tools
+    $ wget https://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-8.0.20.tar.gz
+    $ tar xzf mysql-connector-python-8.0.20.tar.gz
+    $ cd ~/tools/mysql-connector-python-8.0.20
+    $ sudo python3 setup.py install
 ```
-    2. Install bacpypes library
+
+Download and install bacpypes library
 ```
-    $ sudo pip3 install bacpypes
-```
-    3. Open port 47808
-```
+    $ cd ~/tools
+    $ git clone https://github.com/pypa/setuptools_scm.git
+    $ git clone https://github.com/pytest-dev/pytest-runner.git
+    $ git clone https://github.com/JoelBender/bacpypes.git
+    $ cd ~/tools/setuptools_scm/
+    $ sudo python3 setup.py install
+    $ cd ~/tools/pytest-runner/
+    $ sudo python3 setup.py install
+    $ cd ~/tools/bacpypes
+    $ sudo python3 setup.py install
     $ sudo ufw allow 47808
 ```
-    4. Install myems-bacnet service
+Install myems-bacnet service
 ```
+    $ cd ~/tools
+    $ git clone https://github.com/myems/myems-bacnet.git
     $ sudo cp -R ~/myems-bacnet /myems-bacnet
     $ cd /myems-bacnet
 ```
@@ -35,7 +49,7 @@ bacpypes
 ```
     $ sudo nano config.py
 ```
-    Setup systemd configure file:
+    Setup systemd service:
 ```
     $ sudo cp myems-bacnet.service /lib/systemd/system/
 ```

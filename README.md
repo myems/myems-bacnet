@@ -38,27 +38,22 @@ Download and install bacpypes library
     $ sudo python3 setup.py install
     $ sudo ufw allow 47808
 ```
+
 Install myems-bacnet service
 ```
-    $ cd ~/tools
+    $ cd ~
     $ git clone https://github.com/myems/myems-bacnet.git
+    $ git checkout master (or the release tag)
     $ sudo cp -R ~/myems-bacnet /myems-bacnet
-    $ cd /myems-bacnet
 ```
-    Edit the config file for database configuration and local device address
+    Eidt the config config
 ```
-    $ sudo nano config.py
+    $ sudo nano /myems-bacnet/config.py
 ```
     Setup systemd service:
 ```
-    $ sudo cp myems-bacnet.service /lib/systemd/system/
-```
-    Next enable the service:
-```
+    $ sudo cp /myems-bacnet/myems-bacnet.service /lib/systemd/system/
     $ sudo systemctl enable myems-bacnet.service
-```
-    Start the service:
-```
     $ sudo systemctl start myems-bacnet.service
 ```
 

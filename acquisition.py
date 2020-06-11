@@ -72,6 +72,7 @@ def process(logger, ):
             continue
 
     while True:
+        # the outermost while loop
         ################################################################################################################
         # Step 1: Get data source list
         ################################################################################################################
@@ -345,7 +346,7 @@ def process(logger, ):
             trend_value_count = 0
 
             for point_value in analog_value_list:
-                if point_value['is_trend'] and isinstance(point_value['value'], float):
+                if point_value['is_trend']:
                     add_values += " (" + str(point_value['point_id']) + ","
                     add_values += "'" + current_datetime_utc.isoformat() + "',"
                     add_values += str(point_value['value']) + "), "
@@ -363,17 +364,16 @@ def process(logger, ):
 
             # update tbl_analog_value_latest
             delete_values = " DELETE FROM tbl_analog_value_latest WHERE point_id IN ( "
-            latest_values = (" INSERT INTO tbl_analog_value (point_id, utc_date_time, actual_value) "
+            latest_values = (" INSERT INTO tbl_analog_value_latest (point_id, utc_date_time, actual_value) "
                              " VALUES  ")
             latest_value_count = 0
 
             for point_value in analog_value_list:
-                if isinstance(point_value['value'], float):
-                    delete_values += str(point_value['point_id']) + ","
-                    latest_values += " (" + str(point_value['point_id']) + ","
-                    latest_values += "'" + current_datetime_utc.isoformat() + "',"
-                    latest_values += str(point_value['value']) + "), "
-                    latest_value_count += 1
+                delete_values += str(point_value['point_id']) + ","
+                latest_values += " (" + str(point_value['point_id']) + ","
+                latest_values += "'" + current_datetime_utc.isoformat() + "',"
+                latest_values += str(point_value['value']) + "), "
+                latest_value_count += 1
 
             if latest_value_count > 0:
                 try:
@@ -400,7 +400,7 @@ def process(logger, ):
             trend_value_count = 0
 
             for point_value in energy_value_list:
-                if point_value['is_trend'] and isinstance(point_value['value'], float):
+                if point_value['is_trend']:
                     add_values += " (" + str(point_value['point_id']) + ","
                     add_values += "'" + current_datetime_utc.isoformat() + "',"
                     add_values += str(point_value['value']) + "), "
@@ -423,12 +423,11 @@ def process(logger, ):
 
             latest_value_count = 0
             for point_value in energy_value_list:
-                if isinstance(point_value['value'], float):
-                    delete_values += str(point_value['point_id']) + ","
-                    latest_values += " (" + str(point_value['point_id']) + ","
-                    latest_values += "'" + current_datetime_utc.isoformat() + "',"
-                    latest_values += str(point_value['value']) + "), "
-                    latest_value_count += 1
+                delete_values += str(point_value['point_id']) + ","
+                latest_values += " (" + str(point_value['point_id']) + ","
+                latest_values += "'" + current_datetime_utc.isoformat() + "',"
+                latest_values += str(point_value['value']) + "), "
+                latest_value_count += 1
 
             if latest_value_count > 0:
                 try:
@@ -457,7 +456,7 @@ def process(logger, ):
             trend_value_count = 0
 
             for point_value in digital_value_list:
-                if point_value['is_trend'] and isinstance(point_value['value'], int):
+                if point_value['is_trend']:
                     add_values += " (" + str(point_value['point_id']) + ","
                     add_values += "'" + current_datetime_utc.isoformat() + "',"
                     add_values += str(point_value['value']) + "), "
@@ -479,12 +478,11 @@ def process(logger, ):
                              " VALUES  ")
             latest_value_count = 0
             for point_value in digital_value_list:
-                if isinstance(point_value['value'], int):
-                    delete_values += str(point_value['point_id']) + ","
-                    latest_values += " (" + str(point_value['point_id']) + ","
-                    latest_values += "'" + current_datetime_utc.isoformat() + "',"
-                    latest_values += str(point_value['value']) + "), "
-                    latest_value_count += 1
+                delete_values += str(point_value['point_id']) + ","
+                latest_values += " (" + str(point_value['point_id']) + ","
+                latest_values += "'" + current_datetime_utc.isoformat() + "',"
+                latest_values += str(point_value['value']) + "), "
+                latest_value_count += 1
 
             if latest_value_count > 0:
                 try:
@@ -507,4 +505,4 @@ def process(logger, ):
 
         # sleep some seconds
         time.sleep(config.period_in_seconds)
-        # end of outer while loop
+        # end of the outermost while loop

@@ -57,10 +57,29 @@ Install myems-bacnet service
     $ sudo systemctl start myems-bacnet.service
 ```
 
+### Add Data Sources and Points in MyEMS Admin
+
+Input Data source protocol: 
+```
+bacnet-ip
+```
+Input data source connection (example):
+```
+{"host": "192.168.0.3", "port": 47808}
+```
+
+Input point address (example):
+```
+{"object_id":3002786,"object_type":"analogValue","property_array_index":null,"property_name":"presentValue"}
+```
+
+
 ## References
 
-  1. http://myems.io
-  2. http://bacnet.org
-  3. https://github.com/JoelBender/bacpypes
+[1]. http://myems.io
+  
+[2]. http://bacnet.org
+  
+[3]. https://github.com/JoelBender/bacpypes
   
 

@@ -4,7 +4,7 @@ import config
 import time
 from datetime import datetime
 import math
-
+from decimal import Decimal
 from bacpypes.core import run, stop, deferred
 from bacpypes.local.device import LocalDeviceObject
 from bacpypes.pdu import Address, GlobalBroadcast
@@ -17,7 +17,7 @@ from myems_application import MyEMSApplication
 # Step 1: Get data source list
 # Step 2: Get point list
 # Step 3: Read point values from BACnet
-# Step 4: Bulk insert point values to historical database
+# Step 4: Bulk insert point values and update latest values in historical database
 ########################################################################################################################
 
 def process(logger, ):
@@ -72,6 +72,7 @@ def process(logger, ):
             continue
 
     while True:
+        # the outermost while loop
         ################################################################################################################
         # Step 1: Get data source list
         ################################################################################################################
@@ -283,22 +284,20 @@ def process(logger, ):
                     if math.isnan(value):
                         logger.error("response data type is Not A Number: request=%s", request)
                         continue
-                    if ratio is not None and isinstance(ratio, float):
-                        value *= ratio
+
                     analog_value_list.append({'data_source_id': data_source_id,
                                               'point_id': point_id,
                                               'is_trend': is_trend,
-                                              'value': value})
+                                              'value': Decimal(value) * ratio})
                 elif object_type == 'ENERGY_VALUE':
                     if math.isnan(value):
                         logger.error("response data type is Not A Number: request=%s", request)
                         continue
-                    if ratio is not None and isinstance(ratio, float):
-                        value *= ratio
+
                     energy_value_list.append({'data_source_id': data_source_id,
                                               'point_id': point_id,
                                               'is_trend': is_trend,
-                                              'value': value})
+                                              'value': Decimal(value) * ratio})
                 elif object_type == 'DIGITAL_VALUE':
                     if isinstance(value, str):
                         if value == 'active':
@@ -309,7 +308,7 @@ def process(logger, ):
                     digital_value_list.append({'data_source_id': data_source_id,
                                                'point_id': point_id,
                                                'is_trend': is_trend,
-                                               'value': int(value)})
+                                               'value': int(value) * int(ratio)})
 
         except Exception as e:
             logger.error("Step 3.2 ReadPointList " + str(e))
@@ -320,7 +319,7 @@ def process(logger, ):
             del this_application
 
         ################################################################################################################
-        # Step 4: Save point values to historical database
+        # Step 4: Bulk insert point values and update latest values in historical database
         ################################################################################################################
         # check the connection to the database
         if not cnx_historical_db or not cnx_historical_db.is_connected():
@@ -347,7 +346,7 @@ def process(logger, ):
             trend_value_count = 0
 
             for point_value in analog_value_list:
-                if point_value['is_trend'] and isinstance(point_value['value'], float):
+                if point_value['is_trend']:
                     add_values += " (" + str(point_value['point_id']) + ","
                     add_values += "'" + current_datetime_utc.isoformat() + "',"
                     add_values += str(point_value['value']) + "), "
@@ -365,17 +364,16 @@ def process(logger, ):
 
             # update tbl_analog_value_latest
             delete_values = " DELETE FROM tbl_analog_value_latest WHERE point_id IN ( "
-            latest_values = (" INSERT INTO tbl_analog_value (point_id, utc_date_time, actual_value) "
+            latest_values = (" INSERT INTO tbl_analog_value_latest (point_id, utc_date_time, actual_value) "
                              " VALUES  ")
             latest_value_count = 0
 
             for point_value in analog_value_list:
-                if isinstance(point_value['value'], float):
-                    delete_values += str(point_value['point_id']) + ","
-                    latest_values += " (" + str(point_value['point_id']) + ","
-                    latest_values += "'" + current_datetime_utc.isoformat() + "',"
-                    latest_values += str(point_value['value']) + "), "
-                    latest_value_count += 1
+                delete_values += str(point_value['point_id']) + ","
+                latest_values += " (" + str(point_value['point_id']) + ","
+                latest_values += "'" + current_datetime_utc.isoformat() + "',"
+                latest_values += str(point_value['value']) + "), "
+                latest_value_count += 1
 
             if latest_value_count > 0:
                 try:
@@ -402,7 +400,7 @@ def process(logger, ):
             trend_value_count = 0
 
             for point_value in energy_value_list:
-                if point_value['is_trend'] and isinstance(point_value['value'], float):
+                if point_value['is_trend']:
                     add_values += " (" + str(point_value['point_id']) + ","
                     add_values += "'" + current_datetime_utc.isoformat() + "',"
                     add_values += str(point_value['value']) + "), "
@@ -425,12 +423,11 @@ def process(logger, ):
 
             latest_value_count = 0
             for point_value in energy_value_list:
-                if isinstance(point_value['value'], float):
-                    delete_values += str(point_value['point_id']) + ","
-                    latest_values += " (" + str(point_value['point_id']) + ","
-                    latest_values += "'" + current_datetime_utc.isoformat() + "',"
-                    latest_values += str(point_value['value']) + "), "
-                    latest_value_count += 1
+                delete_values += str(point_value['point_id']) + ","
+                latest_values += " (" + str(point_value['point_id']) + ","
+                latest_values += "'" + current_datetime_utc.isoformat() + "',"
+                latest_values += str(point_value['value']) + "), "
+                latest_value_count += 1
 
             if latest_value_count > 0:
                 try:
@@ -459,7 +456,7 @@ def process(logger, ):
             trend_value_count = 0
 
             for point_value in digital_value_list:
-                if point_value['is_trend'] and isinstance(point_value['value'], int):
+                if point_value['is_trend']:
                     add_values += " (" + str(point_value['point_id']) + ","
                     add_values += "'" + current_datetime_utc.isoformat() + "',"
                     add_values += str(point_value['value']) + "), "
@@ -481,12 +478,11 @@ def process(logger, ):
                              " VALUES  ")
             latest_value_count = 0
             for point_value in digital_value_list:
-                if isinstance(point_value['value'], int):
-                    delete_values += str(point_value['point_id']) + ","
-                    latest_values += " (" + str(point_value['point_id']) + ","
-                    latest_values += "'" + current_datetime_utc.isoformat() + "',"
-                    latest_values += str(point_value['value']) + "), "
-                    latest_value_count += 1
+                delete_values += str(point_value['point_id']) + ","
+                latest_values += " (" + str(point_value['point_id']) + ","
+                latest_values += "'" + current_datetime_utc.isoformat() + "',"
+                latest_values += str(point_value['value']) + "), "
+                latest_value_count += 1
 
             if latest_value_count > 0:
                 try:
@@ -509,4 +505,4 @@ def process(logger, ):
 
         # sleep some seconds
         time.sleep(config.period_in_seconds)
-        # end of outer while loop
+        # end of the outermost while loop

@@ -27,9 +27,9 @@ bacnet_device = {
     'foreignTTL': 30,
 }
 
-
-# Get the gateway info from MyEMS Admin Panel and update the 'id' and 'token'
+# Get the gateway ID and token from MyEMS Admin
+# This is used for getting data sources associated with the gateway
 gateway = {
     'id': 1,
-    'token': '983427af-1c35-42ba-8b4d-288675550225'
+    'token': 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA'
 }

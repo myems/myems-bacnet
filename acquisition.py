@@ -91,10 +91,11 @@ def process(logger, ):
                 time.sleep(60)
                 continue
 
+        # Get data sources by gateway and protocol
         try:
             query = (" SELECT ds.id, ds.name, ds.connection "
                      " FROM tbl_data_sources ds, tbl_gateways g "
-                     " WHERE ds.protocol = 'bacnet-ip' AND g.id = %s AND g.token = %s "
+                     " WHERE ds.protocol = 'bacnet-ip' AND ds.gateway_id = g.id AND g.id = %s AND g.token = %s "
                      " ORDER BY ds.id ")
             cursor_system_db.execute(query, (config.gateway['id'], config.gateway['token'],))
             rows_data_source = cursor_system_db.fetchall()

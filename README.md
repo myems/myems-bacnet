@@ -5,6 +5,8 @@
 
 This service is a component of MyEMS to acquire data from BACnet devices
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/myems/myems-bacnet/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/myems/myems-bacnet/?branch=master)
+
 
 ## Prerequisites
 bacpypes

@@ -7,6 +7,7 @@ This service is a component of MyEMS to acquire data from BACnet devices
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/42a86789a9a0425492a8890b5ae43dd8)](https://app.codacy.com/gh/myems/myems-bacnet?utm_source=github.com&utm_medium=referral&utm_content=myems/myems-bacnet&utm_campaign=Badge_Grade)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/myems/myems-bacnet/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/myems/myems-bacnet/?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/90a12776a218fb5ff465/maintainability)](https://codeclimate.com/github/myems/myems-bacnet/maintainability)
 
 
 ## Prerequisites

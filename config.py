@@ -13,7 +13,7 @@ myems_historical_db = {
 }
 
 # Indicates how long the process waits between readings
-period_in_seconds = 60
+period_in_seconds = 180
 
 bacnet_device = {
     'local_address': '192.168.1.10',

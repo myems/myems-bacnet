@@ -505,5 +505,5 @@ def process(logger, ):
                     pass
 
         # sleep some seconds
-        time.sleep(config.period_in_seconds)
+        time.sleep(config.interval_in_seconds)
         # end of the outermost while loop

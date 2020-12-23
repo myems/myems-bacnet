@@ -131,7 +131,7 @@ def process(logger, ):
                 # go to next row_data_source in for loop
                 continue
             try:
-                server = json.loads(row_data_source[2], encoding='utf-8')
+                server = json.loads(row_data_source[2])
             except Exception as e:
                 logger.error("Error in step 1.3 of acquisition process: \n"
                              "Invalid Data Source Connection in JSON " + str(e))
@@ -183,7 +183,7 @@ def process(logger, ):
                 point_object_type = row_point[2]
                 is_trend = row_point[3]
                 ratio = row_point[4]
-                address = json.loads(row_point[5], encoding='utf-8')
+                address = json.loads(row_point[5])
                 # address example
                 # {"object_type":"analogValue", "object_id":3004860, "property_name":"presentValue",
                 # "property_array_index":null}
